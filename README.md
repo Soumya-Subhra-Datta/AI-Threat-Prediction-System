@@ -258,9 +258,9 @@ Select from:
 │   └── static/
 │       ├── css/style.css         # Styles
 │       └── js/app.js             # JavaScript
-├── datasets/
-│   ├── network_data.csv          # Network traffic
-│   └── logs_data.csv             # System logs
+├── datasets/                     # Source: https://www.kaggle.com/datasets/chethuhn/network-intrusion-dataset
+│   
+│ 
 ├── scripts/
 │   ├── generate_data.py          # Generate sample data
 │   └── simulate_attack.py        # Attack simulation
@@ -312,3 +312,4 @@ app.run(debug=True, port=5001)
 ## License
 
 MIT License - Use at your own risk for educational and testing purposes.
+
