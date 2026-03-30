@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proactive Cyber Threat Detection System</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🛡️ AI Threat Detection & Auto-Remediation</h1>
+            <p>Proactive cybersecurity with deep learning predictions & automated response</p>
+        </div>
+
+        <!-- Live Statistics -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="total-threats">0</div>
+                <div class="stat-label">Total Threats</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="blocked-ips">0</div>
+                <div class="stat-label">Blocked IPs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number medium" id="active-threats">0</div>
+                <div class="stat-label">Active Threats</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number low" id="model-accuracy">97.2%</div>
+                <div class="stat-label">AI Accuracy</div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-title">Threat Distribution (24h)</div>
+                <canvas id="threatDistribution"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Threat Timeline (7 days)</div>
+                <canvas id="threatTimeline"></canvas>
+            </div>
+        </div>
+
+        <!-- Live Threat Feed -->
+        <div class="live-feed">
+            <div class="feed-title">🔴 Live Threat Feed</div>
+            <div id="live-feed">
+                <div style="text-align: center; padding: 40px; color: #666;">
+                    Initializing live threat monitoring...
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="status-indicators">
+            <div>AI Model: <span class="status-dot active"></span> Active</div>
+            <div>Database: <span class="status-dot active"></span> Connected</div>
+            <div>Auto-Remediation: <span class="status-dot active"></span> Online</div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

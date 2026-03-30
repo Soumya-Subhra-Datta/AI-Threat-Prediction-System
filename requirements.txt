@@ -1,0 +1,23 @@
+# Proactive Cyber Threat Detection System - Dependencies
+# Install all dependencies: pip install -r requirements.txt
+
+# Core Python packages
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Deep Learning Framework
+tensorflow>=2.13.0
+
+# Database
+mysql-connector-python>=8.1.0
+
+# Web Framework  
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Configuration & Logging  
+python-dotenv>=1.0.0
+
+# Data Processing  
+scipy>=1.10.0

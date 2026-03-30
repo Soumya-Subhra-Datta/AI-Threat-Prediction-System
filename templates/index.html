@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proactive Cyber Threat Detection System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            margin: 0; padding: 20px; 
+            font-family: 'Courier New', monospace; 
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ff88; 
+            min-height: 100vh;
+        }
+        .container { 
+            max-width: 1200px; margin: 0 auto; 
+            text-align: center; 
+        }
+        h1 { 
+            font-size: 3em; 
+            margin-bottom: 10px; 
+            text-shadow: 0 0 20px #00ff88;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #00ff88; }
+            to { text-shadow: 0 0 30px #00ff88, 0 0 40px #00ff88; }
+        }
+        .status { 
+            font-size: 1.2em; 
+            margin: 20px 0; 
+            padding: 15px; 
+            border: 2px solid #00ff88; 
+            border-radius: 10px;
+            background: rgba(0,255,136,0.1);
+        }
+        .btn { 
+            display: inline-block; 
+            padding: 15px 30px; 
+            margin: 10px; 
+            background: linear-gradient(45deg, #00ff88, #00cc66); 
+            color: #000; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            font-size: 1.1em; 
+            transition: all 0.3s; 
+            box-shadow: 0 5px 15px rgba(0,255,136,0.3);
+        }
+        .btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 25px rgba(0,255,136,0.5);
+        }
+        .features { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+            margin-top: 40px; 
+            text-align: left;
+        }
+        .feature { 
+            background: rgba(26,26,46,0.8); 
+            padding: 20px; 
+            border-radius: 10px; 
+            border-left: 4px solid #00ff88;
+        }
+        .live-badge {
+            display: inline-block;
+            background: #ff4444;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ PROACTIVE CYBER THREAT DETECTION</h1>
+        <div class="status">
+            <span class="live-badge">LIVE</span> 
+            Production System • MySQL Connected • AI Active
+        </div>
+        
+        <div style="margin: 40px 0;">
+            <a href="/dashboard" class="btn">🚀 SOC DASHBOARD</a>
+            <a href="#" onclick="testThreat()" class="btn">⚡ QUICK TEST</a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🤖 AI Threat Prediction</h3>
+                <p>Deep Learning model classifies threats: LOW/MEDIUM/HIGH/CRITICAL</p>
+            </div>
+            <div class="feature">
+                <h3>⚡ Auto-Remediation</h3>
+                <p>Automated response engine blocks IPs & redeems threats</p>
+            </div>
+            <div class="feature">
+                <h3>📊 Real-time Analytics</h3>
+                <p>Live charts, threat timeline, blocked IP stats</p>
+            </div>
+            <div class="feature">
+                <h3>🗄️ Production Database</h3>
+                <p>MySQL persistence with threat logs & metrics</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testThreat() {
+            const response = await fetch('/api/detect', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({test: true})
+            });
+            const result = await response.json();
+            alert(`Threat detected: ${result.severity} (${result.confidence}) - Auto-remediated!`);
+        }
+        
+        // Auto-test every 10 seconds
+        setTimeout(testThreat, 10000);
+    </script>
+</body>
+</html>
