@@ -46,114 +46,118 @@ LOW: redeem | MEDIUM: redeem+monitor | HIGH: redeem+block | CRITICAL: redeem+blo
 - ✅ **Live threat feed**
 - ✅ **Threat analytics**
 - ✅ **IP blocklist**
-- ✅ **Model performance tracking**
 
-## 🚀 Windows PowerShell - Complete Setup (5min)
+📂 Project Folder Structure
 
-```powershell
-# 1. Install Python dependencies
+Ensure your local directory is organized as follows:
+
+project/
+│
+├── .env                       # Local Environment Secrets (DB Passwords, API Keys)
+├── config.py                  # Configuration loader for environment variables
+├── app.py                     # Main Flask Backend & Automated DB Manager
+├── requirements.txt           # Python Dependency Manifest
+│
+├── model/                     # Machine Learning Core
+│   ├── train_model.py         # Script to generate data and train the LSTM
+│   ├── model.h5               # Trained Keras Model (Generated)
+│   ├── scaler.pkl             # Scikit-Learn Scaler (Generated)
+│   └── features.pkl           # Feature list metadata (Generated)
+│
+├── database/
+│   └── mysql_setup.sql        # SQL Schema for manual reference
+│
+├── templates/
+│   └── index.html             # Real-time SPA Dashboard (HTML/JS/Tailwind)
+│
+└── simulator/
+    └── attack_simulator.py    # Multi-threaded Network Traffic Generator
+
+
+🛠️ System Requirements
+
+Python 3.9+
+
+MySQL Server 8.0+
+
+## Windows PowerShell (Administrator recommended for IP blocking simulation)
+
+🚀 Execution Guide (Windows PowerShell)
+
+Follow these steps in order to initialize and run the system.
+
+Step 1: Environment Setup
+
+Open PowerShell in the project root and run:
+
+# 1. Create a virtual environment (optional but recommended)
+python -m venv venv
+.\venv\Scripts\activate
+
+# 2. Install all required libraries
 pip install -r requirements.txt
 
-# 2. Setup MySQL (update .env with your password)
-# MySQL: CREATE DATABASE threat_detection_db;
-copy .env.example .env
-# Edit .env → DB_PASSWORD=your_mysql_password
 
-# 3. Initialize database
-python db_setup.py
+Step 2: Configure Secrets
 
-# 4. Train AI model (uses /data/CICIDS2017 datasets)
-python train_model.py
+Create or edit the .env file in the root folder. Match the credentials to your local MySQL instance:
 
-# 5. Start production system
-python app.py
-```
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_mysql_password_here
+DB_NAME=cyber_threat_db
+CERBERUS_API_KEY=CERB-PROD-99821
 
-**New terminal:**
-```powershell
-# Open live SOC dashboard
-start http://localhost:5000/dashboard
 
-# Test auto-remediation (triggers AI + blocks)
-python simulate_threats.py
-```
+Step 3: Train the AI Model
 
-## 📁 File Structure
+Before starting the server, the brain of the system must be trained:
 
-```
-├── app.py                 # Flask API + Remediation Engine
-├── model.py              # Deep Learning Model
-├── data_preprocessing.py # CICIDS2017 Pipeline
-├── database.py           # MySQL ORM
-├── train_model.py        # Training script
-├── simulate_threats.py   # Attack simulator
-├── templates/
-│   └── dashboard.html    # SOC UI
-├── static/
-│   ├── css/dashboard.css
-│   └── js/dashboard.js
-├── models/               # Trained AI model
-├── data/                 # CICIDS2017 dataset
-├── requirements.txt
-├── README.md
-└── .env.example
-```
+python model/train_model.py
 
-## 🎮 Test the Complete System
 
-```powershell
-# Terminal 1: Backend
+Wait for "Model training complete. Assets saved to /model directory" to appear.
+
+Step 4: Launch the Defense System (Flask)
+
+Start the primary monitoring server. Note: This script will automatically drop any existing cyber_threat_db and recreate it fresh every time it runs.
+
 python app.py
 
-# Terminal 2: Dashboard  
-start http://localhost:5000/dashboard
 
-# Terminal 3: Simulate attacks (triggers remediation!)
-python simulate_threats.py
-```
+The system is now live at http://localhost:5000
 
-**Watch the magic:**
-1. **Live threats** appear in dashboard
-2. **AI classifies** severity instantly  
-3. **Auto-remediation** executes
-4. **Charts update** in real-time
-5. **IPs get blocked** automatically
+Step 5: Run the Attack Simulator
 
-## 🔧 Troubleshooting
+Open a second PowerShell window, navigate to the project, and start the traffic generator:
 
-**MySQL Error:**
-```powershell
-mysql -u root -p -e "CREATE DATABASE threat_detection_db;"
-```
+python simulator/attack_simulator.py
 
-**Model not found:**
-```powershell
-python train_model.py
-```
 
-**Dashboard blank:**
-- Backend must be running on `localhost:5000`
-- Check browser console for API errors
+🛡️ Automation Logic & Algorithms
 
-## 📈 Performance
+The system operates on a zero-intervention loop:
 
-| Metric | Value |
-|--------|-------|
-| **Model Accuracy** | 97.2% |
-| **Prediction Latency** | <50ms |
-| **Dashboard Refresh** | 3s |
-| **Max Threats/sec** | 1000+ |
+Detection: Incoming JSON traffic is intercepted by /api/threat_data.
 
-## 🔒 Security Features
+Classification: Data is passed through the LSTM Model.
 
-- `.env` configuration
-- SQL injection protection
-- Input validation
-- Rate limiting ready
-- Production logging
+Response Matrix:
 
----
+Low: [ACTION] Redeeming Threat -> Log to DB.
 
-**Production Ready • Battle Tested • Zero Dependencies Missing**
+Medium/High: [ACTION] Redeeming + [ACTION] Blocking IP -> Update MySQL Blacklist.
 
-**Made with ❤️ for cybersecurity**
+Critical: [ACTION] Immediate Block -> Highest priority logging.
+
+Logging: Every action is mirrored in the terminal and stored in MySQL for the dashboard.
+
+📊 Dashboard Features
+
+Live Traffic: Real-time stream of intercepted packets.
+
+Analytics: Visual distribution of threat types using Chart.js.
+
+Data Export: Download forensic CSV reports for Logs, Blocked IPs, and Redeemed Threats directly from the "Download Reports" tab.
+
+Security Warning: Do not push your .env file to public GitHub repositories. Ensure it is listed in your .gitignore.
