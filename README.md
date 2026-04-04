@@ -1,51 +1,6 @@
-# 🚀 Proactive Cyber Threat Detection & Redemption System
+Proactive Cyber Threat Detection, Auto Redemption and IP Blocking System
 
-## 🎯 Production-Ready AI Cybersecurity Platform
-
-**Deep Learning powered threat prediction + automated remediation**
-
-[![Threat Dashboard Demo](https://via.placeholder.com/800x400/0a0a0a/00d4ff?text=Live+SOC+Dashboard)](http://localhost:5000/dashboard)
-
-## 🏗️ System Architecture
-
-```
-CICIDS2017 Dataset → Deep Learning Model → Flask API → MySQL → SOC Dashboard
-                              ↓
-                    Auto-Remediation Engine
-LOW: redeem | MEDIUM: redeem+monitor | HIGH: redeem+block | CRITICAL: redeem+block+blacklist
-```
-
-## 🤖 Deep Learning Model
-
-**Dense Neural Network (128→64→32→16→4)**
-
-**Why this architecture?**
-- Optimized for **tabular network flow data**
-- **BatchNorm + Dropout** prevents overfitting  
-- **EarlyStopping** ensures optimal training
-- **97.2% accuracy** on CICIDS2017 validation set
-- Processes **real-time predictions** (<50ms latency)
-
-**Classes**: LOW/MEDIUM/HIGH/CRITICAL threat severity
-
-## 🛡️ Automated Remediation
-
-| Severity | Actions |
-|----------|---------|
-| LOW | Auto-redeem |
-| MEDIUM | Redeem + Monitor IP |
-| HIGH | Redeem + Block IP |
-| **CRITICAL** | Redeem + Block + **Permanent Blacklist** |
-
-## 📊 Features
-
-- ✅ **Real-time threat prediction**
-- ✅ **Auto-remediation engine**
-- ✅ **Dark SOC dashboard** (Chart.js)
-- ✅ **MySQL persistence**
-- ✅ **Live threat feed**
-- ✅ **Threat analytics**
-- ✅ **IP blocklist**
+A high-performance, automated cybersecurity defense system. This project utilizes Deep Learning (LSTM) to analyze network traffic patterns, categorize threats into four distinct risk levels, and execute real-time mitigation strategies including automated redemption and IP blacklisting.
 
 📂 Project Folder Structure
 
@@ -80,7 +35,7 @@ Python 3.9+
 
 MySQL Server 8.0+
 
-## Windows PowerShell (Administrator recommended for IP blocking simulation)
+Windows PowerShell (Administrator recommended for IP blocking simulation)
 
 🚀 Execution Guide (Windows PowerShell)
 

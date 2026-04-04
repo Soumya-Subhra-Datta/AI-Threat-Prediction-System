@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proactive Threat System Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .page-content { display: none; }
+        .page-content.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .threat-Low { @apply bg-green-100 text-green-800 font-bold px-2 py-1 rounded; }
+        .threat-Medium { @apply bg-yellow-100 text-yellow-800 font-bold px-2 py-1 rounded; }
+        .threat-High { @apply bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded; }
+        .threat-Critical { @apply bg-red-100 text-red-800 font-bold px-2 py-1 rounded; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-200 font-sans h-screen flex overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-slate-800 border-r border-slate-700 flex flex-col h-full">
+        <div class="p-6 border-b border-slate-700">
+            <h1 class="text-xl font-black text-cyan-400 tracking-tight">
+                <i class="fa-solid fa-shield-halved mr-2"></i> CyberShield
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">Threat Detection System</p>
+        </div>
+        
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <button onclick="nav('home')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn active:bg-cyan-600 active:text-white" id="nav-home">
+                <i class="fa-solid fa-house w-6"></i> Home
+            </button>
+            <button onclick="nav('live')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn" id="nav-live">
+                <i class="fa-solid fa-satellite-dish w-6"></i> Live Traffic
+            </button>
+            <button onclick="nav('logs')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn" id="nav-logs">
+                <i class="fa-solid fa-list-ul w-6"></i> Threat Logs
+            </button>
+            <button onclick="nav('blocked')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn text-red-400 hover:text-red-300" id="nav-blocked">
+                <i class="fa-solid fa-ban w-6"></i> Blocked IPs
+            </button>
+            <button onclick="nav('redeemed')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn text-green-400 hover:text-green-300" id="nav-redeemed">
+                <i class="fa-solid fa-check-shield w-6"></i> Redeemed Threats
+            </button>
+            <button onclick="nav('analytics')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn" id="nav-analytics">
+                <i class="fa-solid fa-chart-pie w-6"></i> Analytics
+            </button>
+            <button onclick="nav('download')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn" id="nav-download">
+                <i class="fa-solid fa-download w-6"></i> Download Reports
+            </button>
+        </nav>
+        
+        <div class="p-4 border-t border-slate-700 text-xs text-slate-500 text-center">
+            System Online • Auto-Redemption Active
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto bg-slate-900 p-8">
+        
+        <!-- HEADER -->
+        <header class="flex justify-between items-center mb-8">
+            <h2 id="page-title" class="text-3xl font-bold text-white">Dashboard Home</h2>
+            <div class="flex items-center space-x-3">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span class="text-sm text-green-400 font-medium">Monitoring Active</span>
+            </div>
+        </header>
+
+        <!-- PAGE: HOME -->
+        <div id="page-home" class="page-content active">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Stat Cards -->
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center shadow-lg">
+                    <div class="p-4 bg-blue-900/50 rounded-lg text-blue-400 mr-4">
+                        <i class="fa-solid fa-radar fa-2x"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-sm font-semibold">Total Threats Detected</p>
+                        <h3 class="text-3xl font-bold" id="stat-total-threats">0</h3>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center shadow-lg">
+                    <div class="p-4 bg-green-900/50 rounded-lg text-green-400 mr-4">
+                        <i class="fa-solid fa-shield-virus fa-2x"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-sm font-semibold">Auto-Redeemed</p>
+                        <h3 class="text-3xl font-bold" id="stat-redeemed">0</h3>
+                    </div>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 flex items-center shadow-lg">
+                    <div class="p-4 bg-red-900/50 rounded-lg text-red-400 mr-4">
+                        <i class="fa-solid fa-ban fa-2x"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-sm font-semibold">IPs Blocked</p>
+                        <h3 class="text-3xl font-bold" id="stat-blocked">0</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+                <h3 class="text-xl font-semibold mb-4 border-b border-slate-700 pb-2">Recent System Activity</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-slate-400 bg-slate-700/50">
+                            <tr>
+                                <th class="p-3 rounded-tl-lg">Time</th>
+                                <th class="p-3">IP Address</th>
+                                <th class="p-3">Threat Level</th>
+                                <th class="p-3 rounded-tr-lg">Action Taken</th>
+                            </tr>
+                        </thead>
+                        <tbody id="home-table-body" class="divide-y divide-slate-700/50">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: LIVE TRAFFIC -->
+        <div id="page-live" class="page-content">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-semibold text-cyan-400"><i class="fa-solid fa-satellite-dish blink"></i> Live Traffic Feed</h3>
+                </div>
+                <div class="overflow-x-auto max-h-[600px] overflow-y-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-slate-400 bg-slate-700/50 sticky top-0">
+                            <tr>
+                                <th class="p-3">ID</th>
+                                <th class="p-3">Timestamp</th>
+                                <th class="p-3">Source IP</th>
+                                <th class="p-3">Raw Traffic Data (Features)</th>
+                                <th class="p-3">ML Classification</th>
+                            </tr>
+                        </thead>
+                        <tbody id="live-table-body" class="divide-y divide-slate-700/50 font-mono text-xs">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: THREAT LOGS -->
+        <div id="page-logs" class="page-content">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+                <p class="text-slate-400 mb-4">Comprehensive logs of all detected anomalies and standard threats.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-slate-400 bg-slate-700/50">
+                            <tr>
+                                <th class="p-3">Date / Time</th>
+                                <th class="p-3">IP Address</th>
+                                <th class="p-3">Threat Level</th>
+                                <th class="p-3">Automated Response</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body" class="divide-y divide-slate-700/50">
+                             <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: BLOCKED IPS -->
+        <div id="page-blocked" class="page-content">
+            <div class="bg-red-900/20 border border-red-500/30 rounded-xl p-6 shadow-lg">
+                <h3 class="text-xl font-semibold text-red-400 mb-4"><i class="fa-solid fa-skull-crossbones mr-2"></i> Null-Routed / Blocked Entities</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-slate-400 bg-slate-800/80">
+                            <tr>
+                                <th class="p-3 rounded-tl-lg">IP Address</th>
+                                <th class="p-3">Time Blocked</th>
+                                <th class="p-3 rounded-tr-lg">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blocked-table-body" class="divide-y divide-red-900/30">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: REDEEMED -->
+        <div id="page-redeemed" class="page-content">
+            <div class="bg-green-900/20 border border-green-500/30 rounded-xl p-6 shadow-lg">
+                 <h3 class="text-xl font-semibold text-green-400 mb-4"><i class="fa-solid fa-shield-virus mr-2"></i> Automatically Redeemed Threats</h3>
+                 <p class="text-slate-400 text-sm mb-4">These threats were intercepted and mitigated by the system automatically before breaching internal perimeters.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="text-slate-400 bg-slate-800/80">
+                            <tr>
+                                <th class="p-3">IP Address</th>
+                                <th class="p-3">Redemption Time</th>
+                                <th class="p-3">Original Threat Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="redeemed-table-body" class="divide-y divide-green-900/30">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: ANALYTICS -->
+        <div id="page-analytics" class="page-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Chart 1: Threat Distribution -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+                    <h3 class="text-lg font-semibold mb-4 text-center">Threat Level Distribution</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="threatChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Chart 2: Blocked vs Redeemed (Mock Data visual for now) -->
+                <div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg">
+                    <h3 class="text-lg font-semibold mb-4 text-center">Action Volume</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="actionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: DOWNLOAD -->
+        <div id="page-download" class="page-content">
+            <div class="bg-slate-800 rounded-xl border border-slate-700 p-8 shadow-lg max-w-2xl mx-auto text-center">
+                <i class="fa-solid fa-file-csv fa-4x text-cyan-500 mb-6"></i>
+                <h3 class="text-2xl font-bold mb-2">Export System Data</h3>
+                <p class="text-slate-400 mb-8">Download comprehensive CSV reports for forensic analysis or compliance auditing.</p>
+                
+                <div class="space-y-4">
+                    <a href="/download/logs" target="_blank" class="block w-full py-3 px-4 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition font-medium border border-slate-600 flex justify-between items-center">
+                        <span><i class="fa-solid fa-list mr-2"></i> Complete Threat Logs</span>
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                    <a href="/download/blocked" target="_blank" class="block w-full py-3 px-4 bg-red-900/40 hover:bg-red-800/60 text-red-100 rounded-lg transition font-medium border border-red-700/50 flex justify-between items-center">
+                        <span><i class="fa-solid fa-ban mr-2"></i> Blocked IP Registry</span>
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                    <a href="/download/redeemed" target="_blank" class="block w-full py-3 px-4 bg-green-900/40 hover:bg-green-800/60 text-green-100 rounded-lg transition font-medium border border-green-700/50 flex justify-between items-center">
+                        <span><i class="fa-solid fa-check-shield mr-2"></i> Redeemed Threat History</span>
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- Navigation Logic ---
+        const pages = ['home', 'live', 'logs', 'blocked', 'redeemed', 'analytics', 'download'];
+        const pageTitles = {
+            'home': 'Dashboard Home',
+            'live': 'Live Traffic Monitoring',
+            'logs': 'Threat Logs Database',
+            'blocked': 'Blocked IP Addresses',
+            'redeemed': 'Redeemed Threats',
+            'analytics': 'System Analytics',
+            'download': 'Download CSV Reports'
+        };
+
+        function nav(pageId) {
+            // Hide all, show selected
+            pages.forEach(p => {
+                document.getElementById(`page-${p}`).classList.remove('active');
+                document.getElementById(`nav-${p}`).classList.remove('bg-cyan-600', 'text-white');
+            });
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            document.getElementById(`nav-${pageId}`).classList.add('bg-cyan-600', 'text-white');
+            document.getElementById('page-title').innerText = pageTitles[pageId];
+            
+            if(pageId === 'analytics') updateCharts();
+        }
+
+        // --- Data Fetching & UI Update Logic ---
+        let chartsInitialized = false;
+        let threatChart, actionChart;
+
+        function getThreatBadge(level) {
+            return `<span class="threat-${level}">${level}</span>`;
+        }
+
+        async function fetchDashboardData() {
+            try {
+                const response = await fetch('/api/dashboard_data');
+                if(!response.ok) return;
+                const data = await response.json();
+                
+                // Update Stats
+                document.getElementById('stat-total-threats').innerText = data.stats.total_threats;
+                document.getElementById('stat-redeemed').innerText = data.stats.total_redeemed;
+                document.getElementById('stat-blocked').innerText = data.stats.total_blocked;
+
+                // Update Home / Logs Table
+                let logsHtml = '';
+                let liveHtml = '';
+                data.live_traffic.forEach(log => {
+                    const row = `
+                        <tr class="hover:bg-slate-700/30 transition">
+                            <td class="p-3">${log.timestamp}</td>
+                            <td class="p-3 font-mono">${log.ip_address}</td>
+                            <td class="p-3">${getThreatBadge(log.threat_level)}</td>
+                            <td class="p-3">${log.action_taken}</td>
+                        </tr>
+                    `;
+                    logsHtml += row;
+                    
+                    const liveRow = `
+                        <tr class="hover:bg-slate-700/30 transition">
+                            <td class="p-3">${log.id}</td>
+                            <td class="p-3 text-slate-400">${log.timestamp}</td>
+                            <td class="p-3 text-cyan-300">${log.ip_address}</td>
+                            <td class="p-3 text-slate-500 truncate max-w-xs">${log.traffic_data}</td>
+                            <td class="p-3">${getThreatBadge(log.threat_level)}</td>
+                        </tr>
+                    `;
+                    liveHtml += liveRow;
+                });
+                document.getElementById('home-table-body').innerHTML = logsHtml;
+                document.getElementById('logs-table-body').innerHTML = logsHtml;
+                document.getElementById('live-table-body').innerHTML = liveHtml;
+
+                // Update Blocked Table
+                let blockedHtml = '';
+                data.blocked_ips.forEach(ip => {
+                    blockedHtml += `
+                        <tr class="hover:bg-red-900/20 transition">
+                            <td class="p-3 font-mono font-bold text-red-300">${ip.ip_address}</td>
+                            <td class="p-3">${ip.blocked_time}</td>
+                            <td class="p-3"><span class="bg-red-600 text-white px-2 py-1 rounded text-xs"><i class="fa-solid fa-lock"></i> ${ip.status}</span></td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('blocked-table-body').innerHTML = blockedHtml;
+
+                // Update Redeemed Table
+                let redeemedHtml = '';
+                data.redeemed.forEach(item => {
+                    redeemedHtml += `
+                        <tr class="hover:bg-green-900/20 transition">
+                            <td class="p-3 font-mono text-green-300">${item.ip_address}</td>
+                            <td class="p-3">${item.redeemed_time}</td>
+                            <td class="p-3">${getThreatBadge(item.threat_level)}</td>
+                        </tr>
+                    `;
+                });
+                document.getElementById('redeemed-table-body').innerHTML = redeemedHtml;
+
+                // Store stat data for charts
+                window.chartData = data.stats;
+                if(document.getElementById('page-analytics').classList.contains('active')) {
+                    updateCharts();
+                }
+
+            } catch(e) {
+                console.error("Error fetching data: ", e);
+            }
+        }
+
+        function updateCharts() {
+            if(!window.chartData) return;
+            
+            const dist = window.chartData.threat_distribution;
+            let labels = [];
+            let counts = [];
+            dist.forEach(d => {
+                labels.push(d.threat_level);
+                counts.push(d.count);
+            });
+
+            // Map colors safely
+            const colorMap = { 'Low': '#4ade80', 'Medium': '#facc15', 'High': '#fb923c', 'Critical': '#f87171' };
+            const bgColors = labels.map(l => colorMap[l] || '#cbd5e1');
+
+            if(chartsInitialized) {
+                threatChart.data.labels = labels;
+                threatChart.data.datasets[0].data = counts;
+                threatChart.data.datasets[0].backgroundColor = bgColors;
+                threatChart.update();
+                
+                actionChart.data.datasets[0].data = [window.chartData.total_blocked, window.chartData.total_redeemed];
+                actionChart.update();
+            } else {
+                // Initialize Charts
+                const ctx1 = document.getElementById('threatChart').getContext('2d');
+                threatChart = new Chart(ctx1, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{ data: counts, backgroundColor: bgColors, borderWidth: 0 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: {color: '#cbd5e1'} } } }
+                });
+
+                const ctx2 = document.getElementById('actionChart').getContext('2d');
+                actionChart = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: ['IPs Blocked', 'Threats Redeemed'],
+                        datasets: [{
+                            label: 'Count',
+                            data: [window.chartData.total_blocked, window.chartData.total_redeemed],
+                            backgroundColor: ['#ef4444', '#22c55e']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: {color: '#cbd5e1'} }, x: { ticks: {color: '#cbd5e1'} } } }
+                });
+                
+                chartsInitialized = true;
+            }
+        }
+
+        // Run fetch every 2 seconds for live update simulation
+        setInterval(fetchDashboardData, 2000);
+        fetchDashboardData(); // Initial load
+
+        // Set default nav active styles dynamically
+        document.getElementById('nav-home').classList.add('bg-cyan-600', 'text-white');
+    </script>
+</body>
+</html>
