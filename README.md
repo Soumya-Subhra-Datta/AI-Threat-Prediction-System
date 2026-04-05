@@ -1,48 +1,70 @@
-Proactive Cyber Threat Detection, Auto Redemption and IP Blocking System
+AI-Powered Proactive Threat Detection System
 
-A high-performance, automated cybersecurity defense system. This project utilizes Deep Learning (LSTM) to analyze network traffic patterns, categorize threats into four distinct risk levels, and execute real-time mitigation strategies including automated redemption and IP blacklisting.
+A real-time cybersecurity web-application utilizing Deep Learning (LSTM) to monitor, classify, and mitigate network threats automatically.
 
-## 🏗️ System Architecture
+🧠 Why LSTM (Long Short-Term Memory)?
 
-```
-CICIDS2017 Dataset → Deep Learning Model → Flask API → MySQL → SOC Dashboard
-                              ↓
-                    Auto-Remediation Engine
-LOW: redeem | MEDIUM: redeem+monitor | HIGH: redeem+block | CRITICAL: redeem+block+blacklist
-```
+In this project, we utilize an LSTM Recurrent Neural Network instead of a standard Artificial Neural Network (ANN) for several critical reasons:
 
-## 🤖 Deep Learning Model
+Temporal Awareness: Network attacks (like DDoS or Brute Force) are not single events; they are sequences of events over time. LSTMs are designed to remember patterns in sequences, making them superior at identifying shifting traffic behaviors.
 
-**Dense Neural Network (128→64→32→16→4)**
+Feature Correlation: The model analyzes the relationship between packet_size, request_rate, failed_logins, and payload_size. An LSTM can identify if a high request rate combined with specific packet sizes over a window of time constitutes a "High" vs "Critical" threat.
 
-**Why this architecture?**
-- Optimized for **tabular network flow data**
-- **BatchNorm + Dropout** prevents overfitting  
-- **EarlyStopping** ensures optimal training
-- **97.2% accuracy** on CICIDS2017 validation set
-- Processes **real-time predictions** (<50ms latency)
+Accuracy in Volatility: Cyber traffic is "noisy." LSTMs use "gates" to forget irrelevant data and focus on high-impact threat signals, leading to fewer false positives.
 
-**Classes**: LOW/MEDIUM/HIGH/CRITICAL threat severity
+🛡️ The "Identify-Grade-Mitigate" Workflow
 
-## 🛡️ Automated Remediation
+The system follows a 4-step automated logic once a packet hits the api/threat_data endpoint:
 
-| Severity | Actions |
-|----------|---------|
-| LOW | Auto-redeem |
-| MEDIUM | Redeem + Monitor IP |
-| HIGH | Redeem + Block IP |
-| **CRITICAL** | Redeem + Block + **Permanent Blacklist** |
+## 1. Identification (Data Ingestion)
 
-## 📊 Features
+The backend captures four key telemetry points from every incoming request:
 
-- ✅ **Real-time threat prediction**
-- ✅ **Auto-remediation engine**
-- ✅ **Dark SOC dashboard** (Chart.js)
-- ✅ **MySQL persistence**
-- ✅ **Live threat feed**
-- ✅ **Threat analytics**
-- ✅ **IP blocklist**
+Packet Size: The weight of individual data units.
 
+Request Rate: The frequency of hits from a specific IP.
+
+Failed Logins: Tracking unauthorized access attempts.
+
+Payload Size: Detecting potential buffer overflows or data exfiltration attempts.
+
+## 2. Grading (AI Classification)
+
+The data is normalized via a scaler and passed into the model.h5. The model outputs a probability across four categories:
+
+Low (0): Normal user behavior.
+
+Medium (1): Suspicious activity (e.g., unusual scanning).
+
+High (2): Likely attack (e.g., repeated login failures).
+
+Critical (3): Immediate threat (e.g., high-volume DDoS signature).
+
+## 3. Redeeming (Processing)
+
+"Redeeming" is our term for the successful interception and logging of a threat.
+
+Every hit is cross-referenced against the AI's grade.
+
+The system "redeems" the threat by converting raw packet data into a structured security log, ensuring the security team has an audit trail of exactly why a specific IP was flagged.
+
+## 4. Blocking (Active Defense)
+
+If the AI grades a threat as Medium, High, or Critical, the system triggers an automated "Block":
+
+The IP is immediately added to the blocked_ips database table.
+
+In a production environment, this table feeds directly into a Firewall (WAF) or Nginx configuration to drop all future packets from that source.
+
+🚀 Running the System
+
+Prerequisites
+
+Python 3.8+
+
+MySQL Server
+
+TensorFlow/Keras & Flask
 
 ## 📂 Project Folder Structure
 
