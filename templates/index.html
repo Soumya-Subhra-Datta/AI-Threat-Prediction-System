@@ -49,7 +49,7 @@
                 <i class="fa-solid fa-ban w-6"></i> Blocked IPs
             </button>
             <button onclick="nav('redeemed')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn text-green-400" id="nav-redeemed">
-                <i class="fa-solid fa-check-shield w-6"></i> Redeemed
+                <i class="fa-solid fa-check-shield w-6"></i> Remediated
             </button>
             <button onclick="nav('analytics')" class="w-full text-left px-4 py-3 rounded-lg hover:bg-slate-700 transition flex items-center nav-btn" id="nav-analytics">
                 <i class="fa-solid fa-chart-line w-6"></i> Analytics
@@ -95,7 +95,7 @@
                     <h3 class="text-4xl font-black text-white" id="stat-total-threats">0</h3>
                 </div>
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg border-l-4 border-l-green-500">
-                    <p class="text-slate-400 text-xs font-bold uppercase mb-1">Auto-Redeemed</p>
+                    <p class="text-slate-400 text-xs font-bold uppercase mb-1">Auto-Remediated</p>
                     <h3 class="text-4xl font-black text-white" id="stat-redeemed">0</h3>
                 </div>
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg border-l-4 border-l-red-500">
@@ -202,7 +202,7 @@
         <!-- Other Pages -->
         <div id="page-logs" class="page-content"><div id="logs-container" class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg"><table class="w-full text-left text-sm"><thead class="bg-slate-900/50 text-slate-400"><tr><th class="p-3">Time</th><th class="p-3">IP</th><th class="p-3">Level</th><th class="p-3">Action</th></tr></thead><tbody id="logs-table-body" class="divide-y divide-slate-700/50"></tbody></table></div></div>
         <div id="page-blocked" class="page-content"><div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg"><table class="w-full text-left text-sm"><thead class="bg-slate-900/50 text-slate-400"><tr><th class="p-3">IP Address</th><th class="p-3">Time Blocked</th><th class="p-3">Status</th></tr></thead><tbody id="blocked-table-body" class="divide-y divide-slate-700/50"></tbody></table></div></div>
-        <div id="page-redeemed" class="page-content"><div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg"><table class="w-full text-left text-sm"><thead class="bg-slate-900/50 text-slate-400"><tr><th class="p-3">IP Address</th><th class="p-3">Redeemed Time</th><th class="p-3">Level</th></tr></thead><tbody id="redeemed-table-body" class="divide-y divide-slate-700/50"></tbody></table></div></div>
+        <div id="page-redeemed" class="page-content"><div class="bg-slate-800 rounded-xl border border-slate-700 p-6 shadow-lg"><table class="w-full text-left text-sm"><thead class="bg-slate-900/50 text-slate-400"><tr><th class="p-3">IP Address</th><th class="p-3">Remediated Time</th><th class="p-3">Level</th></tr></thead><tbody id="redeemed-table-body" class="divide-y divide-slate-700/50"></tbody></table></div></div>
         <div id="page-download" class="page-content">
             <div class="bg-slate-800 rounded-xl border border-slate-700 p-8 shadow-lg max-w-2xl mx-auto text-center">
                 <i class="fa-solid fa-file-csv fa-4x text-cyan-500 mb-6"></i>
@@ -210,7 +210,7 @@
                 <div class="space-y-4 mt-6">
                     <a href="/download/logs" target="_blank" class="block w-full py-3 px-4 bg-slate-700 hover:bg-slate-600 rounded-lg transition border border-slate-600 flex justify-between items-center"><span>Threat Logs</span><i class="fa-solid fa-download"></i></a>
                     <a href="/download/blocked" target="_blank" class="block w-full py-3 px-4 bg-red-900/40 hover:bg-red-800/60 text-red-100 rounded-lg transition border border-red-700/50 flex justify-between items-center"><span>Blocked IPs</span><i class="fa-solid fa-download"></i></a>
-                    <a href="/download/redeemed" target="_blank" class="block w-full py-3 px-4 bg-green-900/40 hover:bg-green-800/60 text-green-100 rounded-lg transition border border-green-700/50 flex justify-between items-center"><span>Redeemed Threats</span><i class="fa-solid fa-download"></i></a>
+                    <a href="/download/redeemed" target="_blank" class="block w-full py-3 px-4 bg-green-900/40 hover:bg-green-800/60 text-green-100 rounded-lg transition border border-green-700/50 flex justify-between items-center"><span>Remediated Threats</span><i class="fa-solid fa-download"></i></a>
                 </div>
             </div>
         </div>
@@ -300,7 +300,7 @@
 
             if(!charts.threat) {
                 charts.threat = createChart('threatChart', 'doughnut', distData.labels, distData.data, distData.colors);
-                charts.action = createChart('actionChart', 'bar', ['Blocked', 'Redeemed'], [stats.total_blocked, stats.total_redeemed], ['#ef4444', '#22c55e']);
+                charts.action = createChart('actionChart', 'bar', ['Blocked', 'Remediated'], [stats.total_blocked, stats.total_redeemed], ['#ef4444', '#22c55e']);
                 charts.accuracy = createChart('accuracyChart', 'line', ['T-5', 'T-4', 'T-3', 'T-2', 'T-1', 'Now'], [92, 94, 93, 95, 97, 98.2], ['#10b981']);
                 charts.latency = createChart('latencyChart', 'line', ['T-5', 'T-4', 'T-3', 'T-2', 'T-1', 'Now'], [120, 115, 140, 110, 105, 98], ['#f97316']);
             } else {

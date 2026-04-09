@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS blocked_ips (
     status VARCHAR(20) DEFAULT 'Blocked'
 );
 
--- Table for tracking successfully redeemed threats
+-- Table for tracking successfully remediated threats
 CREATE TABLE IF NOT EXISTS redeemed_threats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     ip_address VARCHAR(45) NOT NULL,

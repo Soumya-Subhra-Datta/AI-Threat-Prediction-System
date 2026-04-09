@@ -51,9 +51,9 @@ def handle_traffic():
     else:
         threat_level = 'Low'
 
-    action = "Redeemed"
+    action = "Remediated"
     if threat_level in ['Medium', 'High', 'Critical']:
-        action = "Redeemed & Blocked"
+        action = "Remediated & Blocked"
     
     conn = get_db_connection()
     if conn:

@@ -177,6 +177,6 @@ Live Traffic: Real-time stream of intercepted packets.
 
 Analytics: Visual distribution of threat types using Chart.js.
 
-Data Export: Download forensic CSV reports for Logs, Blocked IPs, and Redeemed Threats directly from the "Download Reports" tab.
+Data Export: Download forensic CSV reports for Logs, Blocked IPs, and Remediated Threats directly from the "Download Reports" tab.
 
 Security Warning: Do not push your .env file to public GitHub repositories. Ensure it is listed in your .gitignore.
